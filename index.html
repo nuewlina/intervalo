@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimación por Intervalo de la Media</title>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0; /* Pizarra */
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 800px;
+     margin: 20px 0;
+     box-sizing: border-box;
+}
+
+
+h1 {
+    text-align: center;
+    color: #000000;
+    margin-bottom: 10px;
+    font-size: 2.0em;
+    font-weight: bold;
+    border-bottom: 2px dashed #000;
+    padding-bottom: 5px;
+}
+
+.description {
+    text-align: center;
+    color: #000000;
+    margin-bottom: 15px;
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.exercise-card {
+    background-color: #f9f9f9;
+    border: 2px solid #333;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.exercise-card h2 {
+    color: #000000;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+     font-size: 1.5em;
+     font-weight: bold;
+}
+
+#data-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+#data-list li {
+    background-color: #333;
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+     font-size: 1.1em;
+}
+
+.input-area {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.input-area label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #000000;
+    font-size: 1.1em;
+}
+
+#input-data {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+     box-sizing: border-box;
+}
+
+#update-data-btn {
+   background-color: #2c3e50;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+    font-size: 1.1em;
+}
+
+#update-data-btn:hover {
+    background-color: #34495e;
+}
+
+.steps {
+    margin-top: 15px;
+}
+
+.steps ol {
+    padding-left: 15px;
+      font-size: 1.1em;
+}
+
+.steps li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+    color: #000000;
+     font-size: 1.1em;
+}
+
+.final-result {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #000000;
+}
+
+.result-text {
+  font-weight: normal;
+    display: inline-block;
+    margin-left: 5px;
+    font-weight: bold;
+    color: #000000;
+     font-size: 1.1em;
+}
+
+.full-calculation {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px dashed #333;
+    border-radius: 8px;
+    font-size: 1.1em;
+    line-height: 1.4;
+    background-color: #f9f9f9;
+     color: #000000;
+        white-space: pre-line; /* Mantiene formato */
+}
+
+ button {
+            background-color: #101f2e; /* Azul */
+            color: white;
+            padding: 6px 8px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Azul más oscuro en hover */
+        }
+
+        button:active {
+            background-color: #003f7f; /* Azul aún más oscuro al presionar */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <a href="">
+          <button>Actividad 2</button>
+      </a>
+        <h1>Estimación por Intervalo de la Media</h1>
+        <p class="description">La estimación por intervalo proporciona un rango de valores que probablemente contiene el parámetro poblacional, con un nivel de confianza especificado.</p>
+
+        <div class="exercise-card">
+            <h2>Ejercicio: Intervalo de Confianza para la Media</h2>
+             <p>Supongamos que tenemos datos de tiempo (en minutos) que tardó un equipo en completar una tarea. Los datos son:</p>
+            <ul id="data-list"></ul>
+            
+            <div class="input-area">
+                <label for="input-data"><strong>Edita los valores de la muestra:</strong></label>
+                <input type="text" id="input-data" placeholder="Ej: 15, 18, 14">
+                <button id="update-data-btn">Actualizar</button>
+            </div>
+
+           <div class="steps">
+               <h3>Procedimiento:</h3>
+               <ol>
+                   <li>Media muestral: <span id="media-muestra" class="result-text"></span></li>
+                   <li>Desviación estándar muestral: <span id="desviacion-estandar" class="result-text"></span></li>
+                   <li>Error estándar: <span id="error-estandar" class="result-text"></span></li>
+                   <li>Margen de error: <span id="margen-error" class="result-text"></span></li>
+               </ol>
+                 <p class="final-result">Intervalo de confianza del 95%: <span id="intervalo-confianza" class="result-text"></span></p>
+           </div>
+        </div>
+        <div id="full-calculation" class="full-calculation"></div>
+    </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dataList = document.getElementById('data-list');
+    const inputData = document.getElementById('input-data');
+    const updateDataBtn = document.getElementById('update-data-btn');
+    const mediaMuestra = document.getElementById('media-muestra');
+    const desviacionEstandar = document.getElementById('desviacion-estandar');
+    const errorEstandar = document.getElementById('error-estandar');
+    const margenError = document.getElementById('margen-error');
+    const intervaloConfianza = document.getElementById('intervalo-confianza');
+        const fullCalculationDiv = document.getElementById('full-calculation');
+
+    let data = [];
+
+    function calculateInterval() {
+          dataList.innerHTML = '';
+           if (data.length === 0) {
+              mediaMuestra.textContent = '';
+               desviacionEstandar.textContent = '';
+              errorEstandar.textContent = '';
+              margenError.textContent = '';
+              intervaloConfianza.textContent = '';
+               fullCalculationDiv.textContent = '';
+              return;
+        }
+        
+        data.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          dataList.appendChild(li);
+      });
+
+         const numbers = data.map(Number).filter(Number.isFinite);
+    
+      
+        if(numbers.length > 0) {
+          const n = numbers.length;
+          const mean = numbers.reduce((acc, val) => acc + val, 0) / n;
+               mediaMuestra.textContent = `X̄ = ${mean.toFixed(2)}`;
+                 
+            const sumOfSquares = numbers.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0);
+              const variance = sumOfSquares / (n - 1);
+            const standardDeviation = Math.sqrt(variance);
+          desviacionEstandar.textContent = `σ = ${standardDeviation.toFixed(2)}`;
+
+            const standardError = standardDeviation / Math.sqrt(n);
+             errorEstandar.textContent = `SE = ${standardError.toFixed(2)}`;
+    
+            const zValue = 1.96;
+               const margin = zValue * standardError;
+           margenError.textContent = `ME = ${margin.toFixed(2)}`;
+    
+          const lowerBound = mean - margin;
+              const upperBound = mean + margin;
+                intervaloConfianza.textContent = `[${lowerBound.toFixed(2)}, ${upperBound.toFixed(2)}]`;
+
+        // Proceso completo
+            fullCalculationDiv.textContent = `Datos de la muestra: {${data.join(', ')}}
+Media muestral (X̄): ${mean.toFixed(2)}
+Desviación estándar muestral (σ): ${standardDeviation.toFixed(2)}
+Error estándar (SE): ${standardDeviation.toFixed(2)} / √${n} ≈ ${standardError.toFixed(2)}
+Margen de error (ME): 1.96 * ${standardError.toFixed(2)} ≈ ${margin.toFixed(2)}
+Intervalo de confianza del 95%: [${mean.toFixed(2)} - ${margin.toFixed(2)}, ${mean.toFixed(2)} + ${margin.toFixed(2)}] = [${lowerBound.toFixed(2)}, ${upperBound.toFixed(2)}]
+`;
+
+
+
+           
+        }else{
+             mediaMuestra.textContent = '';
+            desviacionEstandar.textContent = '';
+             errorEstandar.textContent = '';
+             margenError.textContent = '';
+             intervaloConfianza.textContent = '';
+               fullCalculationDiv.textContent = '';
+            alert("Ingresa valores numéricos válidos para calcular el intervalo de confianza.")
+        }
+    }
+
+    updateDataBtn.addEventListener('click', () => {
+        const inputValues = inputData.value.trim();
+        if (inputValues) {
+             data = inputValues.split(',').map(item => {
+                  const num = Number(item.trim());
+                    return Number.isNaN(num) ? item.trim() : num
+              });
+            calculateInterval();
+        } else {
+            alert("Ingresa valores.");
+        }
+    });
+});
+
+const inputData = document.getElementById('input-data');
+
+inputData.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9,\.]/g, '');
+});
+
+</script>
+
+</body>
+</html>
